@@ -1,0 +1,99 @@
+/* All the styling for the app lives in this one file. */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f8;
+  color: #222;
+}
+
+/* The main container - keeps everything centred */
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 0;
+  color: #37003c; /* Premier League purple */
+}
+
+.subtitle {
+  margin-top: 4px;
+  color: #666;
+}
+
+/* ---- Filters ---- */
+
+/* flex puts the inputs side by side; wrap moves them to a new line if there's no room */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.filters input[type="text"],
+.filters select {
+  padding: 8px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.filters button {
+  padding: 8px 14px;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  background-color: #37003c;
+  color: white;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+}
+
+/* ---- Table ---- */
+
+/* Lets the table scroll sideways on small screens */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Player names in bold */
+.name {
+  font-weight: bold;
+}
+
+/* The G+A column stands out in green */
+.highlight {
+  font-weight: bold;
+  color: #00a650;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+th {
+  background-color: #37003c;
+  color: white;
+  text-align: left;
+  padding: 10px;
+}
+
+td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Light highlight when you hover over a row */
+tr:hover td {
+  background-color: #f9f0ff;
+}
