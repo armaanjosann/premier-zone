@@ -2,6 +2,7 @@ package PremierZone.player;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,16 +13,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
 
 @RestController // marks the calass as a Spring MVC controller where every method returns a domain object of a view.
 @RequestMapping(path = "api/v1/player") // the url
-@CrossOrigin(origins = "http://localhost:3000") // let the React app (running on port 3000) call this API
+// Which sites may call this API from a browser is set in CorsConfig.java (app.cors.allowed-origins).
 public class PlayerController {
     private final PlayerService playerService;
+
+    // app.read-only (READ_ONLY env var): blocks the write endpoints on public deployments.
+    @Value("${app.read-only:false}")
+    private boolean readOnly;
 
     @Autowired
     public PlayerController(PlayerService playerService) {
@@ -58,12 +62,14 @@ public class PlayerController {
     
     @PostMapping 
     public ResponseEntity<Player> addPlayer(@RequestBody Player player) { 
+        if (readOnly) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Player createdPlayer = playerService.addPlayer(player);
         return new ResponseEntity<>(createdPlayer, HttpStatus.CREATED);
     }
 
     @PutMapping 
     public ResponseEntity<Player> updatePlayer(@RequestBody Player player) {
+        if (readOnly) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Player resultPlayer = playerService.updatePlayer(player);
         if(resultPlayer != null) {
             return new ResponseEntity<>(resultPlayer, HttpStatus.OK);
@@ -76,6 +82,7 @@ public class PlayerController {
 
     @DeleteMapping("/{playerName}") // name of player we are deleting
     public ResponseEntity<String> deletePlayer(@PathVariable String playerName) {
+        if (readOnly) return new ResponseEntity<>("This deployment is read-only", HttpStatus.FORBIDDEN);
         playerService.deletePlayer(playerName);
         return new ResponseEntity<>("Player deleted successfully", HttpStatus.OK);
     }

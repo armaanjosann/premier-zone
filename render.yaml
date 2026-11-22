@@ -1,0 +1,22 @@
+# Render Blueprint for the Premier Zone API (render.com > New > Blueprint > pick this repo).
+# Render asks for the three DB_* values when you create it; copy them from your Neon connection details.
+services:
+  - type: web
+    name: premier-zone-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./premier-zone/Dockerfile
+    dockerContext: ./premier-zone
+    envVars:
+      - key: DB_URL          # jdbc:postgresql://<neon-host>/<database>?sslmode=require
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: CORS_ORIGINS    # which websites may call the API from a browser
+        value: https://*.vercel.app,http://localhost:3000,http://localhost:5173
+      - key: READ_ONLY       # public deployment: block POST/PUT/DELETE
+        value: "true"
+      - key: SHOW_SQL
+        value: "false"
